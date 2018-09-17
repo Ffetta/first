@@ -1,6 +1,10 @@
 #include <iostream>
 #include <cmath>
+#include <cstring>
+#include <cmath>;
 using namespace std;
+
+
 int  convert(bool a[]){
     int mnogitel=1;
     int chislo=0;
@@ -8,28 +12,9 @@ int  convert(bool a[]){
     for (int i=0;i<=sizeof(a)*8-1;i++){
         chislo=chislo+a[i]*mnogitel;
         mnogitel=mnogitel*2;
+       }
+    cout<<endl<<"v desetichnoi "<<chislo;
 
-
-    }
-  cout<<endl<<chislo;
-
-
-}
-
-uint64_t normalize(double value)
-{
-    int64_t  m_integral=static_cast<int64_t>(floor(value));
-            uint64_t m_fractional=static_cast<int64_t>(floor((value - m_integral) * 1e+18 + 0.5));
-            int64_t tail = m_fractional % (1000);
-    if (tail)
-    {
-        if (tail > 103/2)
-            m_fractional += 1e+3 - tail;
-        else
-            m_fractional -= tail;
-
-    }
-    return m_fractional;
 }
 
 void foo2(){
@@ -47,100 +32,163 @@ void foo2(){
 
 
 }
-void foo3(){
-    bool c;
-    cin>>c;
-    for (char i=sizeof(c)*8-1;i>=0;i--)
+void foo4(int c);
+void foo1(int c);
+
+
+
+
+void izmena(int* c){
+    int a=0;
+    bool b=0;
+    cout<<" kakou bit?"<<endl;
+    cin >>a;
+    a=pow(2,a);
+
+    cout<<" na cto(1 or 0)?"<<endl;
+    cin>> b;
+
+
+
+    if (b==0){
+        *c = *c & ~(a);
+
+
+    }
+    else{
+        *c=*c|(a);
+    }
+}
+
+
+
+void foo3(int c){
+    //cin>>c;
+    bool m[sizeof(c)*16];
+    for (int i=sizeof(c)*16-1;i>=0;i--){
         printf("%d",(c>>i)&1);
-
-
-}
-
-void foo4(){
-    double c;
-    cin>>c;
-    int64_t  m_integral=static_cast<int64_t>(floor(c));
-  // uint64_t m_fractional=  normalize(c);
-  uint64_t m_fractional=static_cast<int64_t>(floor((c- m_integral) * 1e+18 + 0.5));
-    for (char i=sizeof(m_integral)*8-1;i>=0;i--)
-        printf("%d",(m_integral>>i)&1);
-    cout<<".";
-    for (char i=sizeof(m_fractional)*8-1;i>=0;i--)
-        printf("%d",(m_fractional>>i)&1);
-
+        m[i]=(c>>i)&1;
+    }
 
 }
 
-void foo1(){
+void foo4(int c){
+    bool m[sizeof(c)*8+1];
+    for (int i=sizeof(c)*8-1;i>=0;i--){
+        printf("%d",(c>>i)&1);
+        m[i]=(c>>i)&1;
+    }
+    cout<<endl<<"znak "<< m[32]<<endl<<"poryadok ";
+    for (int i=31;i>23;i--){
+        cout<<m[i];
+    }
+    cout<<endl<<"mantisa";
+    for (int i=23;i>=0;i--){
+        cout<<m[i];
+    }
+    int d=0;
+    cout<< endl<<"xotite izmenit?"<<endl<<"1 da"<<endl<<"0 net"<<endl;
+    cin>>d;
+    if (d==1){
+        int *s=&c;
+        izmena(s);
+        foo4(c);
+    }
 
-    int c;
-    cin>>c;
+}
+
+void foo1(int c){
+
     bool m[sizeof(c)*8];
     for (int i=sizeof(c)*8-1;i>=0;i--){
         printf("%d",(c>>i)&1);
         m[i]=(c>>i)&1;
 
 
-
     }
     convert(m);
+    int d=0;
+    cout<< endl<<"xotite izmenit?"<<endl<<"1 da"<<endl<<"0 net"<<endl;
+    cin>>d;
+    if (d==1){
+        int *s=&c;
+        izmena(s);
+        foo1(c);
+    }
 
 }
 
 
 
-//class decimal
-//{
-//    …
-//private:
-//    int64_t  m_integral;
-//    uint64_t m_fractional;
-//};
 
-//decimal::decimal(double value)
-//   :    m_integral(static_cast<int64_t>(std::floor(value))
-//        m_fractional(static_cast<int64_t>(std::floor((value - m_integral) * 1e+18 + 0.5))
-//{
-//    normalize();
-//}
 
-//uint64_t normalize(double value)
-//{
-//    int64_t  m_integral=static_cast<int64_t>(floor(value));
-//            uint64_t m_fractional=static_cast<int64_t>(floor((value - m_integral) * 1e+18 + 0.5));
-//            int64_t tail = m_fractional % (1000);
-//    if (tail)
-//    {
-//        if (tail > 103/2)
-//            m_fractional += 1e+3 - tail;
-//        else
-//            m_fractional -= tail;
 
-//    }
-//    return m_fractional;
-//}
+int perevod(int s, char chislo[]){
+    int a=1;
+    int result=0;
+    for (int i=strlen(chislo)-1; i>=0;i--){
+        if ((int)chislo[i]<58){
+            result=result+((int)chislo[i]-48)*a;
+        }
+
+        else{
+            if ((int)chislo[i]<91){
+                result=result+((int)chislo[i]-55)*a;
+
+            }
+            else{
+                result=result+((int)chislo[i]-61)*a;
+            }
+        }
+
+        a=a*s;
+    }
+    cout<<result<<endl;
+    return result;
+
+}
+
+
+
 
 int main()
-{
-    cout << " 1. int" << endl<<
+{     
+    cout << " 1. int (v liboy sisteme)" << endl<<
             "2. char"<<endl<<
 
-            "3. bool" <<endl<<
-            "4. float" << endl;
-    int a;
-    cin>> a;
-    switch (a) {
+            "3.  float" <<endl<<
+            "4. double" << endl;
+    int ab;
+    cin>> ab;
+    int s=0;
+    switch (ab) {
     case 1:
-        foo1();
+    {char chislo[100];
+        cout << " sistema scislenia " << endl;
+        cin>> s;
+        cout<<"Введите число"<<endl;
+        cin>>chislo;
+        int clislo_v_des =perevod(s,chislo);
+        foo1(clislo_v_des);}
         break;
     case 2:
         foo2();
         break;
     case 3:
-        foo3();
+    { float *c;
+        c = new float;
+        cin>>*c;
+        int *f;
+        f=(int*)c;
+        foo4(*f);}
         break;
     case 4:
-        foo4();
+        double *c;
+        c= new double;
+        cin>>*c;
+        int *f;
+        f=(int*)c;
+        foo3(*f);
         break;
     default:
         main();
